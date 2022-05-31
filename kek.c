@@ -146,8 +146,9 @@ d:  if (insize < 2 || insize > MAX_INPUT_SIZE + 1) {
     uint32_t tab_size = *(uint16_t *)x; x += 2;
     if (tab_size < 1 || tab_size > (1 << 15)) return 1;
     fin(tab_size) {
-        plt[i].sym = *(uint32_t *)x, x += plt[i].char_size = S[*x];
-        if (plt[i].char_size == 0) return 1;
+        uint8_t char_size = S[*x]; if (char_size == 0) return 1;
+        fix (1, char_size, 1) if ((x[i] >> 6) != 2) return 1;
+        plt[i].sym = *(uint32_t *)x, x += plt[i].char_size = char_size;
     }
     if (x > X) return 1;
     
