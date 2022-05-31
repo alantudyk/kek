@@ -7,7 +7,15 @@ $ curl -s https://putinism.wordpress.com/2021/05/18/zaches/ > zaches.txt
 $ kek -c zaches.txt zaches.kek
 $ gzip -9k zaches.kek
 $ gzip -9k zaches.txt
+$ bzip2 -9k zaches.kek
+$ bzip2 -9k zaches.txt
+$ brotli zaches.kek
+$ brotli zaches.txt
 $ ls -lSr zaches.* # reformatted
+       45490 zaches.txt.br
+       45871 zaches.kek.br
+       45907 zaches.txt.bz2
+       48003 zaches.kek.bz2
        50876 zaches.kek.gz
        55039 zaches.txt.gz
       157000 zaches.kek
@@ -33,10 +41,18 @@ $ cat > short.txt
 $ kek -c short.txt short.kek
 $ gzip -9k short.kek
 $ gzip -9k short.txt
+$ bzip2 -9k short.kek
+$ bzip2 -9k short.txt
+$ brotli short.kek
+$ brotli short.txt
 $ ls -lSr short.* # reformatted
-        396 short.kek.gz
-        405 short.txt.gz
-        486 short.kek
-        699 short.txt
+         306 short.txt.br
+         338 short.txt.bz2
+         349 short.kek.br
+         396 short.kek.gz
+         402 short.kek.bz2
+         405 short.txt.gz
+         486 short.kek
+         699 short.txt
 ```
 Oops, this input was compressible.
