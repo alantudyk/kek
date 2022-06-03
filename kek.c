@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
         p += char_size;
         uint32_t *const dp = get_dp(char_size, c);
         if (*dp == 0) {
-            if (N == (1 << 15)) return 1;
+            if (N == (1 << 15)) goto z;
             plt[N].char_size = char_size;
             plt[N].sym = c;
             N++;
@@ -97,16 +97,11 @@ int main(int argc, char **argv) {
             *get_dp(plt[i].char_size, plt[i].sym) = i << 1;
     }
     
-    of = fopen(argv[3], "wb"); if (of == NULL) return 1;
-    
-    if (tsz + csz >= insize) {
-        uint8_t type = 0;
-        return (int)(fwrite(&type, 1, 1, of) != 1 ||
-                     fwrite(_in, 1, insize, of) != insize || fclose(of));
-    }
+    if (tsz + csz >= insize) goto z;
     
     o = _out, *o++ = 1, *(uint16_t *)o = N, o += 2, tsz++;
     fin(N) *(uint32_t *)o = plt[i].sym, o += plt[i].char_size;
+    of = fopen(argv[3], "wb"); if (of == NULL) return 1;
     if (fwrite(_out, 1, tsz, of) != tsz) return 1;
     o = _out, p = _in;
     
@@ -130,6 +125,10 @@ int main(int argc, char **argv) {
         }
     
     return (int)(fwrite(_out, 1, csz, of) != csz || fclose(of));
+    
+z:  *_out = 0, of = fopen(argv[3], "wb"); if (of == NULL) return 1;
+    return (int)(fwrite(_out, 1,      1, of) != 1 ||
+                 fwrite( _in, 1, insize, of) != insize || fclose(of));
     
 d:  if (insize < 2 || insize > MAX_INPUT_SIZE + 1) {
         puts("\n\tInput size must be between (1 + 1) and (1e7 + 1) bytes.\n"); fclose(inf); return 1;
