@@ -72,15 +72,18 @@ int main(int argc, char **argv) {
         p += char_size;
         uint32_t *const dp = get_dp(char_size, c);
         if (*dp == 0) {
-            if (N == (1 << 15)) goto z;
-            plt[N].char_size = char_size;
-            plt[N].sym = c;
+            if (N < (1 << 15)) {
+                plt[N].char_size = char_size;
+                plt[N].sym = c;
+            }
             N++;
         }
         *dp += 1;
     }
     
     if (p != P) return 1;
+    if (N > (1 << 15)) goto z;
+    
     fin(N) plt[i].freq = *get_dp(plt[i].char_size, plt[i].sym);
     qsort(plt, N, sizeof(sym_freq), cmp);
     uint64_t tsz = 2, csz = 0;
