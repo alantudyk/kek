@@ -13,12 +13,12 @@ $ brotli zaches.kek
 $ brotli zaches.txt
 $ ls -lSr zaches.* # reformatted
        45490 zaches.txt.br
-       45871 zaches.kek.br
        45907 zaches.txt.bz2
-       48003 zaches.kek.bz2
-       50876 zaches.kek.gz
+       45923 zaches.kek.br
+       48008 zaches.kek.bz2
+       50875 zaches.kek.gz
        55039 zaches.txt.gz
-      157000 zaches.kek
+      156999 zaches.kek
       199018 zaches.txt
 ```
 Small files are almost incompressible and will be stored without conversion with just 1 extra byte:
@@ -48,11 +48,11 @@ $ brotli short.txt
 $ ls -lSr short.* # reformatted
          306 short.txt.br
          338 short.txt.bz2
-         349 short.kek.br
+         347 short.kek.br
          396 short.kek.gz
-         402 short.kek.bz2
+         401 short.kek.bz2
          405 short.txt.gz
-         486 short.kek
+         485 short.kek
          699 short.txt
 ```
 Oops, this input was compressible.
