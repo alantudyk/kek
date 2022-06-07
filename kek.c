@@ -86,7 +86,8 @@ int main(int argc, char **argv) {
     
     fin(N) plt[i].freq = *get_dp(plt[i].char_size, plt[i].sym);
     qsort(plt, N, sizeof(sym_freq), cmp);
-    uint64_t tsz = 2, csz = 0;
+    *_out = 1 + (N > 256);
+    uint64_t tsz = *_out, csz = 0;
     if (N <= 256)
         fin(N)
             tsz += plt[i].char_size, csz += plt[i].freq,
@@ -102,7 +103,8 @@ int main(int argc, char **argv) {
     
     if (tsz + csz >= insize) goto z;
     
-    o = _out, *o++ = 1, *(uint16_t *)o = N, o += 2, tsz++;
+    o = _out + 1, tsz++;
+    if (*_out == 1) *o++ = N - 1; else *(uint16_t *)o = N - 1, o += 2;
     fin(N) *(uint32_t *)o = plt[i].sym, o += plt[i].char_size;
     of = fopen(argv[3], "wb"); if (of == NULL) return 1;
     if (fwrite(_out, 1, tsz, of) != tsz) return 1;
@@ -138,15 +140,17 @@ d:  if (insize < 2 || insize > MAX_INPUT_SIZE + 1) {
     }
     if (fread(_in, 1, insize, inf) != insize || fclose(inf)) return 1;
     
-    const uint8_t *x = _in, *const X = x + insize; if (*x > 1) return 1;
+    const uint8_t *x = _in, *const X = x + insize, type = *x++;
+    if (type > 2) return 1;
     
-    if (*x++ == 0) {
+    if (type == 0) {
         of = fopen(argv[3], "wb"); if (of == NULL) return 1;
         return (int)(fwrite(x, 1, insize - 1, of) != insize - 1 || fclose(of));
     }
     
-    uint32_t tab_size = *(uint16_t *)x; x += 2;
-    if (tab_size < 1 || tab_size > (1 << 15)) return 1;
+    uint32_t tab_size;
+    if (type == 1) tab_size = 1 + *x++; else tab_size = *(uint16_t *)x + 1, x += 2;
+    if (tab_size > (1 << 15)) return 1;
     fin(tab_size) {
         uint8_t char_size = S[*x]; if (char_size == 0) return 1;
         fix (1, char_size, 1) if ((x[i] >> 6) != 2) return 1;
