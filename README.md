@@ -21,6 +21,23 @@ $ ls -lSr zaches.* # reformatted
       156999 zaches.kek
       199018 zaches.txt
 ```
+Japanese:
+```
+$ curl -s -o wild.txt https://ja.wikipedia.org/wiki/DEATH_STRANDING
+$ kek -c wild.txt wild.kek
+...
+# Running Brotli, GZip, and BZip2
+...
+$ ls -lSr wild.* # reformatted
+       54290 wild.txt.bz2
+       55510 wild.txt.br
+       57367 wild.kek.br
+       59898 wild.kek.bz2
+       65754 wild.kek.gz
+       69318 wild.txt.gz
+      221071 wild.kek
+      271425 wild.txt
+```
 Small files are almost incompressible and will be stored without conversion with just 1 extra byte:
 ```
 $ cat > short.txt
@@ -39,12 +56,9 @@ $ cat > short.txt
 
 Бешмельдэ-шешмельдэ, нащяа-аальника.
 $ kek -c short.txt short.kek
-$ gzip -9k short.kek
-$ gzip -9k short.txt
-$ bzip2 -9k short.kek
-$ bzip2 -9k short.txt
-$ brotli short.kek
-$ brotli short.txt
+...
+# Running Brotli, GZip, and BZip2
+...
 $ ls -lSr short.* # reformatted
          306 short.txt.br
          338 short.txt.bz2
