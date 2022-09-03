@@ -72,3 +72,23 @@ $ ls -lSr short.* # reformatted
 Oops, this input was compressible.
 ## To-do
 https://github.com/powturbo/Turbo-Range-Coder/blob/094f749f12b919241c8d3b10e9c610159001956b/rcutil.c#L214-L231
+```
+//------------- Integer VLC for symbol dictionary coding ----------
+#define VB_B2  4  		// 6: max. 4276351=41407f   5: 2171071=2120bf   4:1118431=1110df  3:592111=908ef
+#define VB_BA2 (255 - (1<<VB_B2))  
+
+#define VB_OFS1 (VB_BA2 - (1<<VB_B2))
+#define VB_OFS2 (VB_OFS1 + (1 << (8+VB_B2)))
+
+#define vbput24(_op_, _x_) { \
+  if(likely((_x_) < VB_OFS1)){ *_op_++ = (_x_); } \
+  else if  ((_x_) < VB_OFS2) { ctou16(_op_) = bswap16((VB_OFS1<<8)+((_x_)-VB_OFS1));                _op_  += 2; } \
+  else                       { *_op_++ = VB_BA2 + (((_x_) -= VB_OFS2) >> 16); ctou16(_op_) = (_x_); _op_  += 2; } \
+}
+
+#define vbget24(_ip_, _x_) do { _x_ = *_ip_++;\
+       if(likely(_x_ < VB_OFS1));\
+  else if(likely(_x_ < VB_BA2))  { _x_ = ((_x_<<8) + (*_ip_)) + (VB_OFS1 - (VB_OFS1 <<  8)); _ip_++;} \
+  else                           { _x_ = ctou16(_ip_) + ((_x_ - VB_BA2 ) << 16) + VB_OFS2; _ip_ += 2;}\
+} while(0)
+```
